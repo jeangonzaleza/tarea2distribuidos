@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message Mensaje{
+    string msg = 1;
+    int32 id = 2;
+    int32 id_dest = 3;
+    string timestamp = 4;
+}
+
+
+message Empty{
+
+}
+
+service Send{
+    rpc Send(Mensaje) returns(Empty){}
+}
+
+service Receive{
+    rpc Receive(Empty) returns(Mensaje){}
+}
