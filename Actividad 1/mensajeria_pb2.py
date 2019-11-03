@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x10mensajeria.proto\"F\n\x07Mensaje\x12\x0b\n\x03msg\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\x12\x0f\n\x07id_dest\x18\x03 \x01(\x05\x12\x11\n\ttimestamp\x18\x04 \x01(\t\"\x07\n\x05\x45mpty2\"\n\x04Send\x12\x1a\n\x04Send\x12\x08.Mensaje\x1a\x06.Empty\"\x00\x32(\n\x07Receive\x12\x1d\n\x07Receive\x12\x06.Empty\x1a\x08.Mensaje\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x10mensajeria.proto\"F\n\x07Mensaje\x12\x0b\n\x03msg\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\x12\x0f\n\x07id_dest\x18\x03 \x01(\x05\x12\x11\n\ttimestamp\x18\x04 \x01(\t\"\x07\n\x05\x45mpty\"!\n\tRequester\x12\x14\n\x0cid_requester\x18\x01 \x01(\x05\x32\"\n\x04Send\x12\x1a\n\x04Send\x12\x08.Mensaje\x1a\x06.Empty\"\x00\x32,\n\x07Receive\x12!\n\x07Receive\x12\n.Requester\x1a\x08.Mensaje\"\x00\x62\x06proto3')
 )
 
 
@@ -101,8 +101,40 @@ _EMPTY = _descriptor.Descriptor(
   serialized_end=99,
 )
 
+
+_REQUESTER = _descriptor.Descriptor(
+  name='Requester',
+  full_name='Requester',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id_requester', full_name='Requester.id_requester', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=101,
+  serialized_end=134,
+)
+
 DESCRIPTOR.message_types_by_name['Mensaje'] = _MENSAJE
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
+DESCRIPTOR.message_types_by_name['Requester'] = _REQUESTER
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Mensaje = _reflection.GeneratedProtocolMessageType('Mensaje', (_message.Message,), {
@@ -119,6 +151,13 @@ Empty = _reflection.GeneratedProtocolMessageType('Empty', (_message.Message,), {
   })
 _sym_db.RegisterMessage(Empty)
 
+Requester = _reflection.GeneratedProtocolMessageType('Requester', (_message.Message,), {
+  'DESCRIPTOR' : _REQUESTER,
+  '__module__' : 'mensajeria_pb2'
+  # @@protoc_insertion_point(class_scope:Requester)
+  })
+_sym_db.RegisterMessage(Requester)
+
 
 
 _SEND = _descriptor.ServiceDescriptor(
@@ -127,8 +166,8 @@ _SEND = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=101,
-  serialized_end=135,
+  serialized_start=136,
+  serialized_end=170,
   methods=[
   _descriptor.MethodDescriptor(
     name='Send',
@@ -151,15 +190,15 @@ _RECEIVE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   serialized_options=None,
-  serialized_start=137,
-  serialized_end=177,
+  serialized_start=172,
+  serialized_end=216,
   methods=[
   _descriptor.MethodDescriptor(
     name='Receive',
     full_name='Receive.Receive',
     index=0,
     containing_service=None,
-    input_type=_EMPTY,
+    input_type=_REQUESTER,
     output_type=_MENSAJE,
     serialized_options=None,
   ),

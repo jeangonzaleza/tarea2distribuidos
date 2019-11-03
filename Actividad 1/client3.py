@@ -28,7 +28,7 @@ class Client:
 
         while True:
             stub = mensajeria_pb2_grpc.ReceiveStub(self.channel)
-            mesg = mensajeria_pb2.Requester(id_requester = 2)
+            mesg = mensajeria_pb2.Requester(id_requester = 3)
             response = stub.Receive(mesg)
             if response.id != 0 :
                 print(response)
@@ -41,7 +41,7 @@ class Client:
     def SendMessage(self):
         message = input("Ingrese Mensaje: ")
         if message is not '':
-            mesg = mensajeria_pb2.Mensaje(msg = message, id = 2, id_dest = 1, timestamp = str(datetime.now()) )
+            mesg = mensajeria_pb2.Mensaje(msg = message, id = 3, id_dest = 1, timestamp = str(datetime.now()) )
             self.stub.Send(mesg)
     
 def Main():

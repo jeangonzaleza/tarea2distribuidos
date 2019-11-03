@@ -12,10 +12,14 @@ message Empty{
 
 }
 
+message Requester{
+    int32 id_requester = 1;
+}
+
 service Send{
     rpc Send(Mensaje) returns(Empty){}
 }
 
 service Receive{
-    rpc Receive(Empty) returns(Mensaje){}
+    rpc Receive(Requester) returns(Mensaje){}
 }

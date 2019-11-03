@@ -58,7 +58,7 @@ class ReceiveStub(object):
     """
     self.Receive = channel.unary_unary(
         '/Receive/Receive',
-        request_serializer=mensajeria__pb2.Empty.SerializeToString,
+        request_serializer=mensajeria__pb2.Requester.SerializeToString,
         response_deserializer=mensajeria__pb2.Mensaje.FromString,
         )
 
@@ -79,7 +79,7 @@ def add_ReceiveServicer_to_server(servicer, server):
   rpc_method_handlers = {
       'Receive': grpc.unary_unary_rpc_method_handler(
           servicer.Receive,
-          request_deserializer=mensajeria__pb2.Empty.FromString,
+          request_deserializer=mensajeria__pb2.Requester.FromString,
           response_serializer=mensajeria__pb2.Mensaje.SerializeToString,
       ),
   }
