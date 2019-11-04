@@ -1,5 +1,6 @@
 import grpc
 import threading
+import socket
 
 import mensajeria_pb2
 import mensajeria_pb2_grpc
@@ -14,12 +15,11 @@ from datetime import datetime
 #
 #response = stub.Send(mesg)
 
-
 class Client:
     mensajes = []
     def __init__(self):
         mensajes = []
-        self.channel = grpc.insecure_channel('server:5000')
+        self.channel = grpc.insecure_channel('172.18.18.2:5000')
         self.stub = mensajeria_pb2_grpc.SendStub(self.channel)
         threading.Thread(target=self.waitMsg, daemon=True).start()
 
