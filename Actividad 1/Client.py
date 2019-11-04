@@ -1,19 +1,12 @@
 import grpc
 import threading
-import socket
 
 import mensajeria_pb2
 import mensajeria_pb2_grpc
 
 from datetime import datetime
 
-#channel = grpc.insecure_channel('localhost:5000')
-#
-#stub = mensajeria_pb2_grpc.SendStub(channel)
-#
-#mesg = mensajeria_pb2.Mensaje(msg = "hola server", id = 1, id_dest = 2, timestamp = str(datetime.now()) )
-#
-#response = stub.Send(mesg)
+idc = None
 
 class Client:
     mensajes = []
@@ -22,20 +15,21 @@ class Client:
         self.channel = grpc.insecure_channel('172.18.18.2:5000')
         self.stub = mensajeria_pb2_grpc.SendStub(self.channel)
         threading.Thread(target=self.waitMsg, daemon=True).start()
+    
+    def HandShake(self):
+        global idc
+        stub = mensajeria_pb2_grpc.HandShakeStub(self.channel)
+        idReq = mensajeria_pb2.Empty()
+        idc = stub.HandShake(idReq).id
 
     def waitMsg(self):
-
+        global idc
         while True:
             stub = mensajeria_pb2_grpc.ReceiveStub(self.channel)
-            mesg = mensajeria_pb2.Requester(id_requester = 1)
+            mesg = mensajeria_pb2.Requester(id_requester = idc)
             response = stub.Receive(mesg)
             if response.id != 0 :
                 print(response)
-
-        #for msg in self.stub:
-        #    mensaje = "[" + str(msg.timestamp) + "] " + str(msg.contenido)
-        #    print(mensaje)
-        #    self.mensajes.append(mensaje)
 
     def SendMessage(self):
         message = input("Ingrese Mensaje: ")
@@ -45,6 +39,8 @@ class Client:
     
 def Main():
     client = Client()
+    client.HandShake()
+    print(idc)
     while(True):
         client.SendMessage()
 

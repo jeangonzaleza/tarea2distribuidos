@@ -7,6 +7,9 @@ message Mensaje{
     string timestamp = 4;
 }
 
+message IdRequest{
+    int32 id = 1;
+}
 
 message Empty{
 
@@ -14,6 +17,10 @@ message Empty{
 
 message Requester{
     int32 id_requester = 1;
+}
+
+service HandShake{
+    rpc HandShake(Empty) returns(IdRequest){}
 }
 
 service Send{

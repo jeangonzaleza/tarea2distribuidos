@@ -4,6 +4,48 @@ import grpc
 import mensajeria_pb2 as mensajeria__pb2
 
 
+class HandShakeStub(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def __init__(self, channel):
+    """Constructor.
+
+    Args:
+      channel: A grpc.Channel.
+    """
+    self.HandShake = channel.unary_unary(
+        '/HandShake/HandShake',
+        request_serializer=mensajeria__pb2.Empty.SerializeToString,
+        response_deserializer=mensajeria__pb2.IdRequest.FromString,
+        )
+
+
+class HandShakeServicer(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def HandShake(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+
+def add_HandShakeServicer_to_server(servicer, server):
+  rpc_method_handlers = {
+      'HandShake': grpc.unary_unary_rpc_method_handler(
+          servicer.HandShake,
+          request_deserializer=mensajeria__pb2.Empty.FromString,
+          response_serializer=mensajeria__pb2.IdRequest.SerializeToString,
+      ),
+  }
+  generic_handler = grpc.method_handlers_generic_handler(
+      'HandShake', rpc_method_handlers)
+  server.add_generic_rpc_handlers((generic_handler,))
+
+
 class SendStub(object):
   # missing associated documentation comment in .proto file
   pass
