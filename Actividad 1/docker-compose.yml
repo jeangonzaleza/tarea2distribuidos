@@ -1,27 +1,42 @@
 version: '3'
 services:
   server:
+    stdin_open: true
+    tty: true
     build:
       context: ./
       dockerfile: Dockerfile.server
     container_name: server
     ports:
-      - 5000:5000
-
+      - 8000:5000
+    volumes:
+      - .:/usr/src/app
     networks:
       - client-server
-  cliente:
+  cliente1:
     stdin_open: true
     tty: true
     build:
       context: ./
       dockerfile: Dockerfile.cliente
-    container_name: cliente
+    container_name: cliente1
     ports:
-     - 5001:5000
-    
-    depends_on:
-      - server
+     - 8001:5000
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - client-server
+  cliente2:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile.cliente
+    container_name: cliente2
+    ports:
+     - 8002:5000
+    volumes:
+      - .:/usr/src/app
     networks:
       - client-server
 networks:

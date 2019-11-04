@@ -19,7 +19,7 @@ class Client:
     mensajes = []
     def __init__(self):
         mensajes = []
-        self.channel = grpc.insecure_channel('localhost:5000')
+        self.channel = grpc.insecure_channel('server:5000')
         self.stub = mensajeria_pb2_grpc.SendStub(self.channel)
         threading.Thread(target=self.waitMsg, daemon=True).start()
 
