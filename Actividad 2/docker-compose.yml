@@ -1,0 +1,19 @@
+version: '3'
+services:
+  rabbit_server:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile.rabbit
+    container_name: rabbit
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - rabbitnet
+networks:
+  rabbitnet:
+    driver: bridge
