@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x10mensajeria.proto\"F\n\x07Mensaje\x12\x0b\n\x03msg\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\x12\x0f\n\x07id_dest\x18\x03 \x01(\x05\x12\x11\n\ttimestamp\x18\x04 \x01(\t\"\x17\n\tIdRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"\x07\n\x05\x45mpty\"!\n\tRequester\x12\x14\n\x0cid_requester\x18\x01 \x01(\x05\x32.\n\tHandShake\x12!\n\tHandShake\x12\x06.Empty\x1a\n.IdRequest\"\x00\x32\"\n\x04Send\x12\x1a\n\x04Send\x12\x08.Mensaje\x1a\x06.Empty\"\x00\x32,\n\x07Receive\x12!\n\x07Receive\x12\n.Requester\x1a\x08.Mensaje\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x10mensajeria.proto\"F\n\x07Mensaje\x12\x0b\n\x03msg\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x05\x12\x0f\n\x07id_dest\x18\x03 \x01(\x05\x12\x11\n\ttimestamp\x18\x04 \x01(\t\"\x17\n\tIdRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"\x07\n\x05\x45mpty\"!\n\tRequester\x12\x14\n\x0cid_requester\x18\x01 \x01(\x05\"\x18\n\x07Listado\x12\r\n\x05lista\x18\x01 \x01(\t2.\n\tHandShake\x12!\n\tHandShake\x12\x06.Empty\x1a\n.IdRequest\"\x00\x32$\n\x04Menu\x12\x1c\n\x04Menu\x12\x08.Mensaje\x1a\x08.Listado\"\x00\x32\"\n\x04Send\x12\x1a\n\x04Send\x12\x08.Mensaje\x1a\x06.Empty\"\x00\x32,\n\x07Receive\x12!\n\x07Receive\x12\n.Requester\x1a\x08.Mensaje\"\x00\x62\x06proto3')
 )
 
 
@@ -163,10 +163,42 @@ _REQUESTER = _descriptor.Descriptor(
   serialized_end=159,
 )
 
+
+_LISTADO = _descriptor.Descriptor(
+  name='Listado',
+  full_name='Listado',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='lista', full_name='Listado.lista', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=161,
+  serialized_end=185,
+)
+
 DESCRIPTOR.message_types_by_name['Mensaje'] = _MENSAJE
 DESCRIPTOR.message_types_by_name['IdRequest'] = _IDREQUEST
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
 DESCRIPTOR.message_types_by_name['Requester'] = _REQUESTER
+DESCRIPTOR.message_types_by_name['Listado'] = _LISTADO
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 Mensaje = _reflection.GeneratedProtocolMessageType('Mensaje', (_message.Message,), {
@@ -197,6 +229,13 @@ Requester = _reflection.GeneratedProtocolMessageType('Requester', (_message.Mess
   })
 _sym_db.RegisterMessage(Requester)
 
+Listado = _reflection.GeneratedProtocolMessageType('Listado', (_message.Message,), {
+  'DESCRIPTOR' : _LISTADO,
+  '__module__' : 'mensajeria_pb2'
+  # @@protoc_insertion_point(class_scope:Listado)
+  })
+_sym_db.RegisterMessage(Listado)
+
 
 
 _HANDSHAKE = _descriptor.ServiceDescriptor(
@@ -205,8 +244,8 @@ _HANDSHAKE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=161,
-  serialized_end=207,
+  serialized_start=187,
+  serialized_end=233,
   methods=[
   _descriptor.MethodDescriptor(
     name='HandShake',
@@ -223,14 +262,38 @@ _sym_db.RegisterServiceDescriptor(_HANDSHAKE)
 DESCRIPTOR.services_by_name['HandShake'] = _HANDSHAKE
 
 
+_MENU = _descriptor.ServiceDescriptor(
+  name='Menu',
+  full_name='Menu',
+  file=DESCRIPTOR,
+  index=1,
+  serialized_options=None,
+  serialized_start=235,
+  serialized_end=271,
+  methods=[
+  _descriptor.MethodDescriptor(
+    name='Menu',
+    full_name='Menu.Menu',
+    index=0,
+    containing_service=None,
+    input_type=_MENSAJE,
+    output_type=_LISTADO,
+    serialized_options=None,
+  ),
+])
+_sym_db.RegisterServiceDescriptor(_MENU)
+
+DESCRIPTOR.services_by_name['Menu'] = _MENU
+
+
 _SEND = _descriptor.ServiceDescriptor(
   name='Send',
   full_name='Send',
   file=DESCRIPTOR,
-  index=1,
+  index=2,
   serialized_options=None,
-  serialized_start=209,
-  serialized_end=243,
+  serialized_start=273,
+  serialized_end=307,
   methods=[
   _descriptor.MethodDescriptor(
     name='Send',
@@ -251,10 +314,10 @@ _RECEIVE = _descriptor.ServiceDescriptor(
   name='Receive',
   full_name='Receive',
   file=DESCRIPTOR,
-  index=2,
+  index=3,
   serialized_options=None,
-  serialized_start=245,
-  serialized_end=289,
+  serialized_start=309,
+  serialized_end=353,
   methods=[
   _descriptor.MethodDescriptor(
     name='Receive',

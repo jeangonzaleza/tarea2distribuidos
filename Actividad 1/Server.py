@@ -12,6 +12,7 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
     def __init__(self):
         self.messages = []
         self.log = "log.txt"
+        self.users = []
 
     def HandShake(self, request, context):
         global ids
@@ -40,11 +41,30 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
         #mensaje_recibido = self.messages[-1]
         
         return response
+
+    def Menu(self, request, context):
+        if request.msg == "1":
+            response = mensajeria_pb2.Listado(lista= "\n".join(self.users))
+            return response
+        elif request.msg == "2":
+            mensajes = ""
+            file = open(self.log, "r")
+            for line in file:
+                if "id:"+request.id+";" in line:
+                    mensajes = mensajes + line.split(";")[0] +"\n"
+            response = mensajeria_pb2.Listado(lista = mensajes)
+            return response  
+        else:
+            response = mensajeria_pb2.Listado(lista = "Proceda a enviar mensajes\n")
+            return response
+    
+    
 def Main():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
     send_servicer = SendServicer()
 
+    mensajeria_pb2_grpc.add_MenuServicer_to_server(send_servicer,server)
     mensajeria_pb2_grpc.add_SendServicer_to_server(send_servicer,server)
     mensajeria_pb2_grpc.add_ReceiveServicer_to_server(send_servicer,server)
     mensajeria_pb2_grpc.add_HandShakeServicer_to_server(send_servicer,server)

@@ -19,8 +19,16 @@ message Requester{
     int32 id_requester = 1;
 }
 
+message Listado{
+    string lista = 1;
+}
+
 service HandShake{
     rpc HandShake(Empty) returns(IdRequest){}
+}
+
+service Menu{
+    rpc Menu(Mensaje) returns(Listado){}
 }
 
 service Send{
