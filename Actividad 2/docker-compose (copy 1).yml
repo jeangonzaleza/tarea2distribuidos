@@ -1,0 +1,67 @@
+version: '3'
+services:
+  rabbit_server:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile.rabbit
+    container_name: rabbit_server
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - rabbitnet
+  server:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile.server
+    container_name: server
+    ports:
+      - 12000:12000
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - rabbitnet
+    restart: on-failure
+    depends_on:
+      - rabbit_server
+  client1:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile.client
+    container_name: client1
+    ports:
+      - 12001:12000
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - rabbitnet
+    restart: on-failure
+    depends_on:
+      - rabbit_server
+  client2:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./
+      dockerfile: Dockerfile.client
+    container_name: client2
+    ports:
+      - 12002:12000
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - rabbitnet
+    restart: on-failure
+    depends_on:
+      - rabbit_server
+networks:
+  rabbitnet:
+    driver: bridge

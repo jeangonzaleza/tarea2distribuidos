@@ -6,7 +6,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.rabbit
-    container_name: rabbit
+    container_name: rabbit_server
     ports:
       - 5672:5672
       - 15672:15672
