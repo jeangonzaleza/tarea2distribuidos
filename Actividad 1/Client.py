@@ -6,8 +6,6 @@ import mensajeria_pb2_grpc
 
 from datetime import datetime
 
-
-
 class Client:
     mensajes = []
 
