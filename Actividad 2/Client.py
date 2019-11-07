@@ -36,7 +36,7 @@ class Consumer(threading.Thread):
     def run(self):
         self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
         self.channel = self.connection.channel()
-        self.channel.queue_declare(queue='GlobalQueue') #Create a queue named GlobalQueue
+        self.channel.queue_declare(queue=str(id_client))
         self.receive()
     
     def callback(self, ch, method, properties, body):
@@ -44,7 +44,7 @@ class Consumer(threading.Thread):
 
     def receive(self):
         print(' [*] Waiting for messages. To exit press CTRL+C')
-        self.channel.basic_consume(queue='GlobalQueue', auto_ack=True, on_message_callback=self.callback) #Recibe mensajes de la cola
+        self.channel.basic_consume(queue=str(id_client), auto_ack=True, on_message_callback=self.callback) #Recibe mensajes de la cola
         self.channel.start_consuming()
 
 class Producer(threading.Thread):
@@ -56,24 +56,27 @@ class Producer(threading.Thread):
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='GlobalQueue') #Create a queue named GlobalQueue
         self.handshake()
-        print("Su id es: ",id_client)
         while(True):
             self.send()
 
     def send(self):
         msg = input("[*] Ingrese mensaje: ")
-        self.channel.basic_publish(exchange='', routing_key='GlobalQueue', body=msg) #Envia msg a la cola
+        self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
+                                    properties=pika.BasicProperties(headers={'to': 2, 'from': id_client}), 
+                                    body=msg) #Envia msg a la cola
 
     def handshake(self):
-        self.channel.basic_publish(exchange='', routing_key='GlobalQueue', body="peticion")
+        self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
+                                    properties=pika.BasicProperties(headers={'to': 0, 'from': id_client}), 
+                                    body="peticion de id")
 
 def Main():
     try:
         global id_client
-        #consumer = Consumer()
+        consumer = Consumer()
         producer = Producer()
         handshake = HandShake()
-        #consumer.start()
+
         producer.start()
         handshake.start()
         while(id_client == None):
@@ -81,6 +84,8 @@ def Main():
         print("Su id es: ", id_client)
         handshake.join()
         print("handshake killed")
+
+        consumer.start()
 
 
     except KeyboardInterrupt:

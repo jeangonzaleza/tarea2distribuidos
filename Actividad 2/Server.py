@@ -8,6 +8,8 @@ id_actual = 1
 class Consumer(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
+        self.producer = Producer()
+        self.producer.start()
 
     def run(self):
         self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost')) #Connect to rabbitmq
@@ -18,12 +20,16 @@ class Consumer(threading.Thread):
     
     def callback(self, ch, method, properties, body):
         global id_actual
-        msg = body
+        msg = body.decode('utf-8')
+        header = properties.headers
         print("[*] Received %r" % msg)
-        if (msg == b'peticion'):
+        if (header['to'] == 0 and header['from'] == None):
             self.channel.basic_publish(exchange='', routing_key='HandShakeQueue', body=str(id_actual))
+            self.channel.queue_declare(queue=str(id_actual))
             id_actual += 1
             print ("siguiente id: ",id_actual)
+        elif (header['to'] != 0 and header['from'] != None):
+            self.producer.send(msg, header)
 
     def receive(self):
         print(' [*] Waiting for messages. To exit press CTRL+C')
@@ -38,13 +44,12 @@ class Producer(threading.Thread):
         self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='GlobalQueue')
-        self.channel.queue_declare(queue='HandShakeQueue')
-        while(True):
-            self.send()
 
-    def send(self):
-        msg = input("[*] Ingrese mensaje: ")
-        self.channel.basic_publish(exchange='', routing_key='GlobalQueue', body=msg) #Envia msg a la cola
+    def send(self, msg, header):
+        self.channel.queue_declare(queue=str(header['to']))
+        self.channel.basic_publish(exchange='', routing_key=str(header['to']), 
+                                    properties=pika.BasicProperties(headers=header), 
+                                    body=msg) #Envia msg a la cola
 
 def Main():
     try:
