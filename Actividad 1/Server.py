@@ -23,11 +23,16 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
 
     def Send(self, request, context):
         print(request)
+        file = open(self.log,"a")
+        file.write("id:%d;id_dest:%d;msg:%s;timestamp:%s \n" % (request.id, request.id_dest, request.msg, request.timestamp))
+        file.close()
         self.messages.append(request)
         response = mensajeria_pb2.Empty()
         return response
     
     def Receive(self, request, context):
+        if str(request.id_requester) not in self.users:
+            self.users.append(str(request.id_requester))
         if (len(self.messages)>0):
             for mensaje in self.messages:
                 if (mensaje.id_dest == request.id_requester):
@@ -44,19 +49,21 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
 
     def Menu(self, request, context):
         if request.msg == "1":
-            response = mensajeria_pb2.Listado(lista= "\n".join(self.users))
-            return response
+            response = mensajeria_pb2.Listado(lista= " ".join(self.users))
+            
         elif request.msg == "2":
             mensajes = ""
             file = open(self.log, "r")
             for line in file:
-                if "id:"+request.id+";" in line:
-                    mensajes = mensajes + line.split(";")[0] +"\n"
+                if "id:"+str(request.id)+";" in line:
+                    mensajes = mensajes + line2
             response = mensajeria_pb2.Listado(lista = mensajes)
-            return response  
+            file.close()
+              
         else:
             response = mensajeria_pb2.Listado(lista = "Proceda a enviar mensajes\n")
-            return response
+            
+        return response
     
     
 def Main():

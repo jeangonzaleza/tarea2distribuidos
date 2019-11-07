@@ -1,0 +1,2 @@
+id:1;id_dest:2;msg:hola;timestamp:2019-11-07 00:35:03.862983 
+id:1;id_dest:2;msg:chao;timestamp:2019-11-07 00:35:11.406971 
