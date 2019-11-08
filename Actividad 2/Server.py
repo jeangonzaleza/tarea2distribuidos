@@ -4,6 +4,8 @@ import time
 import sys
 
 id_actual = 1
+users = []
+log = "log.txt"
 
 class Consumer(threading.Thread):
     def __init__(self):
@@ -26,10 +28,31 @@ class Consumer(threading.Thread):
         if (header['to'] == 0 and header['from'] == None):
             self.channel.basic_publish(exchange='', routing_key='HandShakeQueue', body=str(id_actual))
             self.channel.queue_declare(queue=str(id_actual))
+            users.append(id_actual)
             id_actual += 1
             print ("siguiente id: ",id_actual)
         elif (header['to'] != 0 and header['from'] != None):
+            file = open(log, "a")
+            file.write(msg+"\n")
             self.producer.send(msg, header)
+        elif (header['to'] == 0 and header['from'] != None):
+            if msg == "lista mensajes":
+                msg = ""
+                file = open(self.log, "r")
+                for line in file:
+                    if "from:"+str(header['from'])+";" in line:
+                        msg = msg + line
+                header['to'] = header['from']
+                header['from'] = 0
+                self.producer.send(msg, header)
+                file.close()
+            if msg == "lista usuarios":
+                msg = ""
+                for usuario in users:
+                    msg = msg + str(usuario)+ "\n"
+                header['to'] = header['from']
+                header['from'] = 0
+                self.producer.send(msg, header)
 
     def receive(self):
         print(' [*] Waiting for messages. To exit press CTRL+C')

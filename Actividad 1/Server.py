@@ -56,7 +56,7 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
             file = open(self.log, "r")
             for line in file:
                 if "id:"+str(request.id)+";" in line:
-                    mensajes = mensajes + line2
+                    mensajes = mensajes + line
             response = mensajeria_pb2.Listado(lista = mensajes)
             file.close()
               
@@ -85,7 +85,8 @@ def Main():
         while True:
             time.sleep(86400)
     except KeyboardInterrupt:
-        server.stop()
+        print("cerrando server")
+        server.stop(0)
 
 if __name__ == '__main__':
     Main()

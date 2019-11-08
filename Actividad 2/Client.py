@@ -60,10 +60,21 @@ class Producer(threading.Thread):
             self.send()
 
     def send(self):
-        msg = input("[*] Ingrese mensaje: ")
-        self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
-                                    properties=pika.BasicProperties(headers={'to': 2, 'from': id_client}), 
-                                    body=msg) #Envia msg a la cola
+        opcion = input("Seleccione una de las siguiente opciones: \n \t 1-Lista usuarios \n \t 2-Lista mensajes enviados \n \t 3-Enviar mensaje \n")
+        if opcion == "1":
+            self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
+                                    properties=pika.BasicProperties(headers={'to': 0, 'from': id_client}), 
+                                    body="lista mensajes")
+        elif opcion == "2":
+            self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
+                                    properties=pika.BasicProperties(headers={'to': 0, 'from': id_client}), 
+                                    body="lista usuarios")
+        elif opcion == "3":
+            destino = input("[*] Ingrese destino:")
+            msg = input("[*] Ingrese mensaje: ")
+            self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
+                                        properties=pika.BasicProperties(headers={'to': destino, 'from': id_client}), 
+                                        body=msg) #Envia msg a la cola
 
     def handshake(self):
         self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
