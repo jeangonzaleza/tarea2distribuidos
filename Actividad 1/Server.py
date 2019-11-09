@@ -10,7 +10,7 @@ ids = 1
 class SendServicer(mensajeria_pb2_grpc.SendServicer):
 
     def __init__(self):
-        self.messages = []
+        self.messages = {}
         self.log = "log.txt"
         self.users = []
 
@@ -19,6 +19,7 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
         response = mensajeria_pb2.IdRequest()
         response.id = ids
         ids += 1
+        self.messages[ids] = []
         return response
 
     def Send(self, request, context):
@@ -26,7 +27,7 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
         file = open(self.log,"a")
         file.write("id:%d;id_dest:%d;msg:%s;timestamp:%s \n" % (request.id, request.id_dest, request.msg, request.timestamp))
         file.close()
-        self.messages.append(request)
+        self.messages[request.id_dest].append(request)
         response = mensajeria_pb2.Empty()
         return response
     
@@ -38,7 +39,7 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
                 if (mensaje.id_dest == request.id_requester):
                     mensaje_recibido = mensaje
                     response = mensajeria_pb2.Mensaje(msg=mensaje_recibido.msg, id = mensaje_recibido.id, id_dest = mensaje_recibido.id_dest, timestamp = mensaje_recibido.timestamp)
-                    self.messages.remove(mensaje)
+                    self.messages[request.id_requester].remove(mensaje)
                 else:
                     response = mensajeria_pb2.Mensaje(msg="", id = 0, id_dest = request.id_requester, timestamp = "")
         else:
