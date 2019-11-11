@@ -1,2 +1,5 @@
 id:1;id_dest:2;msg:hola;timestamp:2019-11-07 00:35:03.862983 
 id:1;id_dest:2;msg:chao;timestamp:2019-11-07 00:35:11.406971 
+id:2;id_dest:1;msg:hola;timestamp:2019-11-11 23:05:10.672865 
+id:2;id_dest:1;msg:hola;timestamp:2019-11-11 23:12:25.273065 
+id:2;id_dest:1;msg:hola;timestamp:2019-11-11 23:15:52.077700 

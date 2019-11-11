@@ -18,8 +18,8 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
         global ids
         response = mensajeria_pb2.IdRequest()
         response.id = ids
+        self.messages[ids] = list()
         ids += 1
-        self.messages[ids] = []
         return response
 
     def Send(self, request, context):
@@ -34,12 +34,13 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
     def Receive(self, request, context):
         if str(request.id_requester) not in self.users:
             self.users.append(str(request.id_requester))
-        if (len(self.messages)>0):
-            for mensaje in self.messages:
+        if (len(self.messages[request.id_requester])>0):
+            for mensaje in self.messages[request.id_requester]:
                 if (mensaje.id_dest == request.id_requester):
                     mensaje_recibido = mensaje
                     response = mensajeria_pb2.Mensaje(msg=mensaje_recibido.msg, id = mensaje_recibido.id, id_dest = mensaje_recibido.id_dest, timestamp = mensaje_recibido.timestamp)
                     self.messages[request.id_requester].remove(mensaje)
+                    break
                 else:
                     response = mensajeria_pb2.Mensaje(msg="", id = 0, id_dest = request.id_requester, timestamp = "")
         else:
