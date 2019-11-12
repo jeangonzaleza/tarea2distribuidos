@@ -35,6 +35,8 @@ class Consumer(threading.Thread):
             file = open(log, "a")
             file.write(msg+"\n")
             self.producer.send(msg, header)
+        ##    
+        ## PROCESAMIENTO MENSAJES DEL MENU
         elif (header['to'] == 0 and header['from'] != None):
             if msg == "lista mensajes":
                 msg = ""
@@ -46,8 +48,20 @@ class Consumer(threading.Thread):
                 header['from'] = 0
                 self.producer.send(msg, header)
                 file.close()
+
             if msg == "lista usuarios":
                 msg = ""
+                for usuario in users:
+                    heart = {}
+                    heart['to'] = usuario
+                    heart['from'] = 0
+                    beat = 'beat'
+                    self.producer.send(beat, heart)
+                time.sleep(1)
+                for usuario in users:
+                    check = self.channel.queue_declare(queue=usuario, passive=True)
+                    if check.method.message_count == 0:
+                        users.remove(usuario)
                 for usuario in users:
                     msg = msg + str(usuario)+ "\n"
                 header['to'] = header['from']
