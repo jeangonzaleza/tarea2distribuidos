@@ -64,11 +64,11 @@ class Producer(threading.Thread):
         if opcion == "1":
             self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
                                     properties=pika.BasicProperties(headers={'to': 0, 'from': id_client}), 
-                                    body="lista mensajes")
+                                    body="lista usuarios")
         elif opcion == "2":
             self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
                                     properties=pika.BasicProperties(headers={'to': 0, 'from': id_client}), 
-                                    body="lista usuarios")
+                                    body="lista mensajes")
         elif opcion == "3":
             destino = input("[*] Ingrese destino:")
             msg = input("[*] Ingrese mensaje: ")

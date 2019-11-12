@@ -28,7 +28,7 @@ class Consumer(threading.Thread):
         if (header['to'] == 0 and header['from'] == None):
             self.channel.basic_publish(exchange='', routing_key='HandShakeQueue', body=str(id_actual))
             self.channel.queue_declare(queue=str(id_actual))
-            users.append(id_actual)
+            #users.append(str(id_actual))
             id_actual += 1
             print ("siguiente id: ",id_actual)
         elif (header['to'] != 0 and header['from'] != None):
@@ -40,7 +40,7 @@ class Consumer(threading.Thread):
         elif (header['to'] == 0 and header['from'] != None):
             if msg == "lista mensajes":
                 msg = ""
-                file = open(self.log, "r")
+                file = open(log, "r")
                 for line in file:
                     if "from:"+str(header['from'])+";" in line:
                         msg = msg + line
@@ -51,6 +51,9 @@ class Consumer(threading.Thread):
 
             if msg == "lista usuarios":
                 msg = ""
+                users = []
+                for i in range(id_actual):
+                    users.append(i+1)
                 for usuario in users:
                     heart = {}
                     heart['to'] = usuario
@@ -59,8 +62,8 @@ class Consumer(threading.Thread):
                     self.producer.send(beat, heart)
                 time.sleep(1)
                 for usuario in users:
-                    check = self.channel.queue_declare(queue=usuario, passive=True)
-                    if check.method.message_count == 0:
+                    check = self.channel.queue_declare(queue=str(usuario), passive=True)
+                    if check.method.message_count != 0:
                         users.remove(usuario)
                 for usuario in users:
                     msg = msg + str(usuario)+ "\n"
