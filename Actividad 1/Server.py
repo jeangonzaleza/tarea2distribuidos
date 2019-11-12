@@ -51,8 +51,15 @@ class SendServicer(mensajeria_pb2_grpc.SendServicer):
 
     def Menu(self, request, context):
         if request.msg == "1":
+            for key in self.messages.keys():
+                self.messages[key].append(mensajeria_pb2.Mensaje(msg="heartbeat", id=0, id_dest=key, timestamp=""))
+            time.sleep(1)
+            self.users = []
+            for user, mensajes in self.messages.items():
+                
+                if len(mensajes) == 0 :
+                    self.users.append(str(user))
             response = mensajeria_pb2.Listado(lista= " ".join(self.users))
-            
         elif request.msg == "2":
             mensajes = ""
             file = open(self.log, "r")
