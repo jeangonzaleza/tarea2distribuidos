@@ -14,7 +14,19 @@ class Consumer(threading.Thread):
         self.producer.start()
 
     def run(self):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost')) #Connect to rabbitmq
+        self.connected = 0
+        while(self.connected == 0):
+            try:
+                self.connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit_server')) #Connect to rabbitmq
+                self.connected = 1
+            except pika.exceptions.AMQPConnectionError:
+                self.connected = 0
+                print("Ups, el servidor de rabbitMQ no responde, reintentando en:")
+                for i in range(5):
+                    print("..", (5-i))
+                    time.sleep(1)
+                print("...")
+        
         self.channel = self.connection.channel() #Create the channel
         self.channel.queue_declare(queue='GlobalQueue') #Create a queue named GlobalQueue
         self.channel.queue_declare(queue='HandShakeQueue') #Create a queue named HandShakeQueue
@@ -81,7 +93,7 @@ class Producer(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters('rabbit_server'))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='GlobalQueue')
 
