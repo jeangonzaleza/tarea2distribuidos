@@ -11,7 +11,6 @@ class Consumer(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.producer = Producer()
-        self.producer.start()
 
     def run(self):
         self.connected = 0
@@ -26,7 +25,7 @@ class Consumer(threading.Thread):
                     print("..", (5-i))
                     time.sleep(1)
                 print("...")
-        
+        self.producer.start()
         self.channel = self.connection.channel() #Create the channel
         self.channel.queue_declare(queue='GlobalQueue') #Create a queue named GlobalQueue
         self.channel.queue_declare(queue='HandShakeQueue') #Create a queue named HandShakeQueue
