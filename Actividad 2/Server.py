@@ -77,10 +77,10 @@ class Consumer(threading.Thread):
                     if check.method.message_count != 0:
                         users.remove(usuario)
                 for usuario in users:
-                    msg = msg + str(usuario)+ "\n"
+                    msg = msg + str(usuario)+ " - "
                 header['to'] = header['from']
                 header['from'] = 0
-                self.producer.send(msg, header)
+                self.producer.send(msg[:-3], header)
 
     def receive(self):
         print(' [*] Waiting for messages. To exit press CTRL+C')

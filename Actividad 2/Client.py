@@ -52,7 +52,7 @@ class Consumer(threading.Thread):
         self.receive()
     
     def callback(self, ch, method, properties, body):
-        print("[*] Received %r" % body)
+        print("[*] Received %r" % body.decode('utf-8'))
 
     def receive(self):
         print(' [*] Waiting for messages. To exit press CTRL+C')
