@@ -71,11 +71,7 @@ class Producer(threading.Thread):
                 self.connected = 1
             except pika.exceptions.AMQPConnectionError:
                 self.connected = 0
-                print("Ups, el servidor de rabbitMQ no responde, reintentando en:")
-                for i in range(5):
-                    print("..", (5-i))
-                    time.sleep(1)
-                print("...")
+                time.sleep(1)
                 
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='GlobalQueue') #Create a queue named GlobalQueue
