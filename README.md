@@ -9,7 +9,7 @@
 Para levantar la arquitectura del chat desarrollado se debe utilizar el comando ``docker-compose up``, esto levantara el servidor y 2 clientes.
 
 Para poder realizar el envio de mensajes es necesario conectarse a la consola de alguno de los clientes y para ello se utiliza el comando ``docker attach [Container]``
-donde "Container" debe ser reemplazado por "cliente1" o "cliente2" en caso de utilizar los que se levantaron con el servidor.
+donde "Container" debe ser reemplazado por "cliente1" o "cliente2" en caso de utilizar los clientes que se levantaron con el servidor.
 
 En caso de necesitar un cliente nuevo, es posible crear uno nuevo utilizando el comando ``docker-compose run cliente1``. Con esto el cliente recibira su id que correspondera al primer mensaje que imprime para luego desplegar el menu para elegir una acción.
 
