@@ -30,7 +30,7 @@ class Client:
             mesg = mensajeria_pb2.Requester(id_requester = self.idc)
             response = stub.Receive(mesg)
             if response.id != 0 :
-                print(response)
+                print("Usuario " +str(response.id)+ " \n te envia el siguiente mensaje: "+ response.msg + "\n a las : " + str(response.timestamp))
 
     def SendMessage(self):
         destino = input("Ingrese destino: ")
