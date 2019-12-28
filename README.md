@@ -1,11 +1,15 @@
 # Tarea 2
 
 # Actividad 1
-comandos:
-docker-compose up //levanta arquitectura cliente servidor con 2 clientes
-docker attach [CONTAINER] // Se conecta a la terminal del container especificado (en este caso la de python que esta en ejecucion)
 
-docker-compose run [CONTAINER] //Para crear un nuevo cliente en un nuevo container que se conectara al servidor ya creado
+Para levantar la arquitectura del chat desarrollado se debe utilizar el comando "docker-compose up", esto levantara el servidor y 2 clientes.
+
+Para poder realizar el envio de mensajes es necesario conectarse a la consola de alguno de los clientes y para ello se utiliza el comando "docker attach [Container]"
+donde "Container" debe ser reemplazado por "cliente1" o "cliente2" en caso de utilizar los que se levantaron con el servidor.
+
+En caso de necesitar un cliente nuevo, es posible crear uno nuevo utilizando el comando "docker-compose run cliente1". Con esto el cliente recibira su id que correspondera al primer mensaje que imprime para luego desplegar el menu para elegir una acción.
+
+Para el envio de mensajes de los 2 clientes creados juntos con el servidor es necesario prestar atencion a la consola donde fue ejecutado el comando "docker-compose up" ya que es ahi donde se imprimira inicialmente los mensajes a los clientes y por lo tanto el mensaje de asignacion de id.
 
 
 # Actividad 2
