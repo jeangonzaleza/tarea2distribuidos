@@ -20,6 +20,8 @@ Para el envio de mensajes de los 2 clientes creados juntos con el servidor es ne
 
 Para levantar la arquitectura se debe usar el comando ``docker-compose up``, esto levanta el broker encargado de almacenar las colas de RabbitMQ, el servidor que se encarga del redireccionamiento de los mensajes, y dos clientes iniciales.
 
+Si el Broker de RabbitMQ no está disponible, ya sea por algun error o porque aún no termina de iniciar el levantamiento, el servidor y los clientes fallarán a la hora de intentar conectarse, tras esto esperan cinco segundos y vuelven a intentarlo hasta que se logre entablar comunicación con RabbitMQ, esto se hace puesto que el broker se demora en iniciar cuando se levanta por primera vez con ``docker-compose up``.
+
 Para acceder a la consola de cada cliente predeterminado se deben abrir terminales distintas y escribir el comando ``docker attach client1`` y ``docker attach client2``, de esta manera se puede comenzar a interactuar en las consolas de cada cliente y realizar las acciones requeridas.
 
 Para agregar nuevos clientes, en una nueva terminal se debe usar el comando ``docker-compose run client1`` para cada cliente nuevo. Esto creará automaticamente un nuevo cliente y abrirá la consola intectiva correspondiente.
