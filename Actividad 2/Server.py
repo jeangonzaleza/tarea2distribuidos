@@ -105,9 +105,7 @@ class Producer(threading.Thread):
 def Main():
     try:
         consumer = Consumer()
-        #producer = Producer()
         consumer.start()
-        #producer.start()
     except KeyboardInterrupt:
         print("Bye")
 
