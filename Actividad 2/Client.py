@@ -28,7 +28,7 @@ class HandShake(threading.Thread):
         self.handshake()
         return
 
-    def callback(self, ch, method, properties, body):
+    def callback(self, ch, method, properties, body): #funcion que se ejecuta cuando se detecta un mensaje en la cola
         global id_client
         id_client = int(body)
         print("[*] Received id %r" % id_client)
@@ -41,7 +41,7 @@ class HandShake(threading.Thread):
         self.channel.basic_consume(queue='HandShakeQueue', on_message_callback=self.callback)
         self.channel.start_consuming()
 
-class Consumer(threading.Thread):
+class Consumer(threading.Thread): #Thread encargado de leer mensajes en la cola
     def __init__(self):
         threading.Thread.__init__(self)
 
@@ -59,7 +59,7 @@ class Consumer(threading.Thread):
         self.channel.basic_consume(queue=str(id_client), auto_ack=True, on_message_callback=self.callback) #Recibe mensajes de la cola
         self.channel.start_consuming()
 
-class Producer(threading.Thread):
+class Producer(threading.Thread): #Thread Encargado de enviar mensajes a la cola Global
     def __init__(self):
         threading.Thread.__init__(self)
 
@@ -96,7 +96,7 @@ class Producer(threading.Thread):
                                         properties=pika.BasicProperties(headers={'to': destino, 'from': id_client}), 
                                         body=msg) #Envia msg a la cola
 
-    def handshake(self):
+    def handshake(self): #Cuando ingresa por primera vez al sistema, cliente pide un id al servidor
         self.channel.basic_publish(exchange='', routing_key='GlobalQueue', 
                                     properties=pika.BasicProperties(headers={'to': 0, 'from': id_client}), 
                                     body="peticion de id")
