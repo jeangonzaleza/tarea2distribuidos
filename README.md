@@ -6,7 +6,7 @@
 
 ## Actividad 1
 
-Para levantar la arquitectura del chat desarrollado se debe utilizar el comando ``docker-compose up``, esto levantara el servidor y 2 clientes.
+Para levantar la arquitectura del chat desarrollado es necesario abrir un terminal dentro de la carpeta "Actividad 1" para luego utilizar el comando ``docker-compose up``, esto levantara el servidor y 2 clientes.
 
 Para poder realizar el envio de mensajes es necesario conectarse a la consola de alguno de los clientes y para ello se utiliza el comando ``docker attach [Container]``
 donde "Container" debe ser reemplazado por "cliente1" o "cliente2" en caso de utilizar los clientes que se levantaron con el servidor.
@@ -18,7 +18,7 @@ Para el envio de mensajes de los 2 clientes creados juntos con el servidor es ne
 
 ## Actividad 2
 
-Para levantar la arquitectura se debe usar el comando ``docker-compose up``, esto levanta el broker encargado de almacenar las colas de RabbitMQ, el servidor que se encarga del redireccionamiento de los mensajes, y dos clientes iniciales.
+Para levantar la arquitectura del chat desarrollado es necesario abrir un terminal dentro de la carpeta "Actividad 1" para luego usar el comando ``docker-compose up``, esto levanta el broker encargado de almacenar las colas de RabbitMQ, el servidor que se encarga del redireccionamiento de los mensajes, y dos clientes iniciales.
 
 Si el Broker de RabbitMQ no está disponible, ya sea por algun error o porque aún no termina de iniciar el levantamiento, el servidor y los clientes fallarán a la hora de intentar conectarse, tras esto esperan cinco segundos y vuelven a intentarlo hasta que se logre entablar comunicación con RabbitMQ, esto se hace puesto que el broker se demora en iniciar cuando se levanta por primera vez con ``docker-compose up``.
 
